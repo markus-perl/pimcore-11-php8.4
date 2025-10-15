@@ -208,7 +208,7 @@ class Ffmpeg extends Adapter
         return $success;
     }
 
-    public function saveImage(string $file, int $timeOffset = null): bool
+    public function saveImage(string $file, ?int $timeOffset = null): bool
     {
         $timeOffset = (string) ($timeOffset ?? 5);
 
