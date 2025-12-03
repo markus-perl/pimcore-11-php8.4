@@ -25,9 +25,7 @@ use Presta\SitemapBundle\Service\UrlContainerInterface;
 class DocumentGeneratorContext extends GeneratorContext
 {
     public function __construct(
-        UrlContainerInterface $urlContainer,
-        string $section = null,
-        Site $site = null,
+        UrlContainerInterface $urlContainer, ?string $section = null, ?Site $site = null,
         array $parameters = []
     ) {
         if (null !== $site) {

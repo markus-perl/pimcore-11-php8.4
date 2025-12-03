@@ -33,8 +33,7 @@ interface JobRunErrorLogRepositoryInterface
      * @return JobRunErrorLog[]
      */
     public function getLogsByJobRunId(
-        int $jobRunId,
-        int $step = null,
+        int $jobRunId, ?int $step = null,
         array $orderBy = [],
         int $limit = 100,
         int $offset = 0

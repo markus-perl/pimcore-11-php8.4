@@ -625,7 +625,7 @@ abstract class Page extends Container
      *
      * @throws Exception  if order is not integer or null
      */
-    public function setOrder(int|string $order = null): static
+    public function setOrder( int|string|null $order = null): static
     {
         if (is_string($order)) {
             $temp = (int) $order;

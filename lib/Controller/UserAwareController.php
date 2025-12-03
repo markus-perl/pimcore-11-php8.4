@@ -67,8 +67,7 @@ abstract class UserAwareController extends Controller
     }
 
     protected function createAccessDeniedHttpException(
-        string $message = 'Access Denied.',
-        Throwable $previous = null,
+        string $message = 'Access Denied.', ?Throwable $previous = null,
         int $code = 0,
         array $headers = []
     ): AccessDeniedHttpException {

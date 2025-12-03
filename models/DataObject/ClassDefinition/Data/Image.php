@@ -183,7 +183,7 @@ class Image extends Data implements ResourcePersistenceAwareInterface, QueryReso
         return $dependencies;
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }

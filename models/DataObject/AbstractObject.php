@@ -38,7 +38,7 @@ use Pimcore\Model\Element\ElementInterface;
  * @method array|null getPermissions(?string $type, Model\User $user, bool $quote = true)
  * @method bool __isBasedOnLatestData()
  * @method string getCurrentFullPath()
- * @method int getChildAmount($objectTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_VARIANT, DataObject::OBJECT_TYPE_FOLDER], Model\User $user = null)
+ * @method int getChildAmount($objectTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_VARIANT, DataObject::OBJECT_TYPE_FOLDER], Model\User|null $user = null)
  * @method array getChildPermissions(?string $type, Model\User $user, bool $quote = true)
  */
 abstract class AbstractObject extends Model\Element\AbstractElement
@@ -172,7 +172,7 @@ abstract class AbstractObject extends Model\Element\AbstractElement
         return self::$getInheritedValues;
     }
 
-    public static function doGetInheritedValues(Concrete $object = null): bool
+    public static function doGetInheritedValues( ?Concrete $object = null): bool
     {
         if (self::$getInheritedValues && $object !== null) {
             $class = $object->getClass();
@@ -696,7 +696,7 @@ abstract class AbstractObject extends Model\Element\AbstractElement
      *
      * @internal
      */
-    protected function update(bool $isUpdate = null, array $params = []): void
+    protected function update( ?bool $isUpdate = null, array $params = []): void
     {
         $this->updateModificationInfos();
 
@@ -898,7 +898,7 @@ abstract class AbstractObject extends Model\Element\AbstractElement
     /**
      * @throws Exception
      */
-    public function get(string $fieldName, string $language = null): mixed
+    public function get(string $fieldName, ?string $language = null): mixed
     {
         if (!$fieldName) {
             throw new Exception('Field name must not be empty.');
@@ -910,7 +910,7 @@ abstract class AbstractObject extends Model\Element\AbstractElement
     /**
      * @throws Exception
      */
-    public function set(string $fieldName, mixed $value, string $language = null): mixed
+    public function set(string $fieldName, mixed $value, ?string $language = null): mixed
     {
         if (!$fieldName) {
             throw new Exception('Field name must not be empty.');

@@ -103,7 +103,7 @@ class Time extends Model\DataObject\ClassDefinition\Data\Input
         }
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }
@@ -133,7 +133,7 @@ class Time extends Model\DataObject\ClassDefinition\Data\Input
      *
      *
      */
-    private function toTimestamp(string $string, int $baseTimestamp = null): int
+    private function toTimestamp(string $string, ?int $baseTimestamp = null): int
     {
         if ($baseTimestamp === null) {
             $baseTimestamp = time();

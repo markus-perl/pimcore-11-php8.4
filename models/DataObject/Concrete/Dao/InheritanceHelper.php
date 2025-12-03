@@ -66,7 +66,7 @@ class InheritanceHelper
 
     protected ?string $queryIdField = null;
 
-    public function __construct(string $classId, string $idField = null, string $storetable = null, string $querytable = null, string $relationtable = null, string $queryIdField = null)
+    public function __construct(string $classId, ?string $idField = null, ?string $storetable = null, ?string $querytable = null, ?string $relationtable = null, ?string $queryIdField = null)
     {
         $this->db = \Pimcore\Db::get();
         $this->classId = $classId;

@@ -184,7 +184,7 @@ class Select extends Data implements
         return htmlspecialchars((string) $data, ENT_QUOTES, 'UTF-8');
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }

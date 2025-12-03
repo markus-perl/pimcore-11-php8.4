@@ -539,7 +539,7 @@ abstract class PageSnippet extends Model\Document
      *
      * @throws Exception
      */
-    public function getUrl(string $hostname = null, string $scheme = null): string
+    public function getUrl( ?string $hostname = null, ?string $scheme = null): string
     {
         if (!$scheme) {
             $scheme = 'http://';

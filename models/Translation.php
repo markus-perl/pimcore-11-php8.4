@@ -308,7 +308,7 @@ final class Translation extends AbstractModel
      *
      * @throws Exception
      */
-    public static function getByKeyLocalized(string $id, string $domain = self::DOMAIN_DEFAULT, bool $create = false, bool $returnIdIfEmpty = false, string $language = null): ?string
+    public static function getByKeyLocalized(string $id, string $domain = self::DOMAIN_DEFAULT, bool $create = false, bool $returnIdIfEmpty = false, ?string $language = null): ?string
     {
         if ($domain == self::DOMAIN_ADMIN) {
             if ($user = Tool\Admin::getCurrentUser()) {
@@ -381,7 +381,7 @@ final class Translation extends AbstractModel
      *
      * @internal
      */
-    public static function importTranslationsFromFile(string $file, string $domain = self::DOMAIN_DEFAULT, bool $replaceExistingTranslations = true, array $languages = null, stdClass $dialect = null): array
+    public static function importTranslationsFromFile(string $file, string $domain = self::DOMAIN_DEFAULT, bool $replaceExistingTranslations = true, array $languages = null, ?stdClass $dialect = null): array
     {
         $delta = [];
 

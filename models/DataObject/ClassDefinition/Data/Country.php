@@ -32,7 +32,7 @@ class Country extends Model\DataObject\ClassDefinition\Data\Select
      */
     public ?string $restrictTo = null;
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }

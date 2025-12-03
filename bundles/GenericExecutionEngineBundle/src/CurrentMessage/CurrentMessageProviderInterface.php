@@ -23,8 +23,7 @@ interface CurrentMessageProviderInterface
 {
     public function getTranslationMessages(
         string $key,
-        array $parameters = [],
-        string $domain = null
+        array $parameters = [], ?string $domain = null
     ): MessageInterface;
 
     public function getPlainMessage(string $message): MessageInterface;

@@ -424,7 +424,7 @@ class Numeric extends Data implements ResourcePersistenceAwareInterface, QueryRe
         return '';
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }

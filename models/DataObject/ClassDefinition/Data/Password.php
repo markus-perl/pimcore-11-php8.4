@@ -325,7 +325,7 @@ class Password extends Data implements ResourcePersistenceAwareInterface, QueryR
         return '';
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }

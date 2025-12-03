@@ -1421,7 +1421,7 @@ class Asset extends Element\AbstractElement
      *
      * @return $this
      */
-    public function addMetadata(string $name, string $type, mixed $data = null, string $language = null): static
+    public function addMetadata(string $name, string $type, mixed $data = null, ?string $language = null): static
     {
         if ($name && $type) {
             $tmp = [];

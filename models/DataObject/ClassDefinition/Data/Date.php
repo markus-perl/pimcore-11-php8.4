@@ -236,7 +236,7 @@ class Date extends Data implements ResourcePersistenceAwareInterface, QueryResou
         return $this->useCurrentDate;
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }

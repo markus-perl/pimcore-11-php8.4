@@ -76,7 +76,7 @@ final class RedirectHandler
      *
      * @throws Exception
      */
-    public function checkForRedirect(Request $request, bool $override = false, Site $sourceSite = null): ?Response
+    public function checkForRedirect(Request $request, bool $override = false, ?Site $sourceSite = null): ?Response
     {
         // not for admin requests
         if ($this->requestHelper->isFrontendRequestByAdmin($request)) {
@@ -110,8 +110,7 @@ final class RedirectHandler
     private function matchRegexRedirect(
         Redirect $redirect,
         Request $request,
-        RedirectUrlPartResolver $partResolver,
-        Site $sourceSite = null
+        RedirectUrlPartResolver $partResolver, ?Site $sourceSite = null
     ): ?Response {
         if (empty($redirect->getType())) {
             return null;

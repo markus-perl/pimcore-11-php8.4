@@ -424,7 +424,7 @@ class ManyToOneRelation extends AbstractRelations implements QueryResourcePersis
         $this->allowToClearRelation = $allowToClearRelation;
     }
 
-    public function isDiffChangeAllowed(Concrete $object, array $params = []): bool
+    public function isDiffChangeAllowed(?Concrete $object, array $params = []): bool
     {
         return true;
     }
