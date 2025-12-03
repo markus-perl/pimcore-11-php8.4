@@ -77,7 +77,7 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation implemen
      */
     public array $visibleFieldDefinitions = [];
 
-    protected function prepareDataForPersistence(array|Element\ElementInterface $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete $object = null, array $params = []): mixed
+    protected function prepareDataForPersistence(array|Element\ElementInterface $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete|null $object = null, array $params = []): mixed
     {
         $return = [];
 
@@ -106,7 +106,7 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation implemen
         }
     }
 
-    protected function loadData(array $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete $object = null, array $params = []): mixed
+    protected function loadData(array $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete|null $object = null, array $params = []): mixed
     {
         $list = [
             'dirty' => false,
@@ -555,7 +555,7 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation implemen
                 'id' => $object->getId(),
                 'fieldname' => $this->getName(),
             ];
-            if ($context) {
+            if $context) {
                 if (!empty($context['fieldname'])) {
                     $deleteConditions['ownername'] = $context['fieldname'];
                 }

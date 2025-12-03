@@ -84,7 +84,7 @@ class ManyToManyObjectRelation extends AbstractRelations implements QueryResourc
         return true;
     }
 
-    protected function prepareDataForPersistence(array|Element\ElementInterface $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete $object = null, array $params = []): mixed
+    protected function prepareDataForPersistence(array|Element\ElementInterface $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete|null $object = null, array $params = []): mixed
     {
         $return = [];
 
@@ -112,7 +112,7 @@ class ManyToManyObjectRelation extends AbstractRelations implements QueryResourc
         }
     }
 
-    protected function loadData(array $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete $object = null, array $params = []): mixed
+    protected function loadData(array $data, Localizedfield|AbstractData|\Pimcore\Model\DataObject\Objectbrick\Data\AbstractData|Concrete|null $object = null, array $params = []): mixed
     {
         $objects = [
             'dirty' => false,
