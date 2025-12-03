@@ -16,20 +16,15 @@ declare(strict_types=1);
 
 namespace Pimcore\Tool;
 
-use Doctrine\DBAL\Connection;
-use Exception;
 use InvalidArgumentException;
 use Pimcore;
 use Pimcore\Event\SystemEvents;
-use Pimcore\Model\Tool\TmpStore;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class MaintenanceModeHelper implements MaintenanceModeHelperInterface
 {
-    protected const ENTRY_ID = 'maintenance_mode';
-
-    public function __construct(protected RequestStack $requestStack, protected Connection $db)
+    public function __construct(protected RequestStack $requestStack)
     {
     }
 
@@ -57,14 +52,6 @@ class MaintenanceModeHelper implements MaintenanceModeHelperInterface
 
     public function isActive(string $matchSessionId = null): bool
     {
-        try {
-            if (!$this->db->isConnected()) {
-                $this->db->connect();
-            }
-        } catch (Exception) {
-            return false;
-        }
-
         if ($maintenanceModeEntry = $this->getEntry()) {
             if ($matchSessionId === null || $matchSessionId !== $maintenanceModeEntry) {
                 return true;
@@ -76,27 +63,30 @@ class MaintenanceModeHelper implements MaintenanceModeHelperInterface
 
     protected function addEntry(string $sessionId): void
     {
-        TmpStore::add(self::ENTRY_ID, $sessionId);
+        file_put_contents($this->getFilePath(), $sessionId);
     }
 
     protected function getEntry(): ?string
     {
-        try {
-            $tmpStore = TmpStore::get(self::ENTRY_ID);
-        } catch (Exception $e) {
-            //nothing to log as the tmp doesn't exist
-            return null;
+        $file = $this->getFilePath();
+        if (file_exists($file)) {
+            $content = file_get_contents($file);
+            return $content !== false ? $content : null;
         }
 
-        return $tmpStore instanceof TmpStore ? $tmpStore->getData() : null;
+        return null;
     }
 
     protected function removeEntry(): void
     {
-        try {
-            TmpStore::delete(self::ENTRY_ID);
-        } catch (Exception $e) {
-            //nothing to log as the tmp doesn't exist
+        $file = $this->getFilePath();
+        if (file_exists($file)) {
+            unlink($file);
         }
+    }
+
+    private function getFilePath(): string
+    {
+        return PIMCORE_PRIVATE_VAR . '/maintenance_mode';
     }
 }
