@@ -348,7 +348,7 @@ final class ClassDefinition extends Model\AbstractModel implements ClassDefiniti
             $this->setId((string) $maxId);
         }
 
-        // Anchored with \z (CVE-2026-55072, backport of upstream 2026.1.5): name and ID end up
+        // Anchored with \z (CVE-2026-55072, backport of upstream 12.3.9 / 2026.1.5): name and ID end up
         // unquoted in generated PHP and SQL, so the whole string must match, not just a prefix.
         if (!preg_match('/^[a-zA-Z]\w+\z/', $this->getName())) {
             throw new Exception(sprintf('Invalid name for class definition: %s', $this->getName()));

@@ -557,7 +557,8 @@ class Classificationstore extends Data implements CustomResourcePersistingInterf
 
     public function setName(string $name): static
     {
-        $this->name = $name;
+        // Go through Data::setName() so the field-name validation (CVE-2026-55634) applies here too.
+        parent::setName($name);
 
         return $this;
     }

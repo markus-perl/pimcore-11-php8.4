@@ -142,7 +142,8 @@ class ImageGallery extends Data implements ResourcePersistenceAwareInterface, Qu
 
         $images = $data[$this->getName() . '__images'];
         $hotspots = $data[$this->getName() . '__hotspots'];
-        $hotspots = Serialize::unserialize($hotspots);
+        // No class may be instantiated from the stored hotspots (CVE-2026-45162 / CVE-2026-55220).
+        $hotspots = $hotspots ? Serialize::unserialize($hotspots, false) : [];
 
         if (!$images) {
             return $this->createEmptyImageGallery($params);

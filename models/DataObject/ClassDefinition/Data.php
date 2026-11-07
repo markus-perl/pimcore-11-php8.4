@@ -170,7 +170,7 @@ abstract class Data implements DataObject\ClassDefinition\Data\TypeDeclarationSu
      */
     public function setName(string $name): static
     {
-        // CVE-2026-55634 (backport of upstream 11.5.19): a field name is emitted verbatim into the
+        // CVE-2026-55634 (backport of upstream 12.3.10 / 2026.1.6): a field name is emitted verbatim into the
         // generated PHP class files and into ALTER TABLE DDL, so it must be a valid identifier.
         // `\z` rather than `$`: PCRE `$` also matches before a trailing newline.
         if ($name !== '' && !preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{0,62}\z/', $name)) {

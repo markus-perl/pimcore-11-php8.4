@@ -92,8 +92,9 @@ class ResponseExceptionListener implements EventSubscriberInterface
                 'code' => $statusCode,
                 'parametersGet' => serialize($_GET),
                 'parametersPost' => serialize($_POST),
-                'cookies' => serialize($_COOKIE),
-                'serverVars' => serialize($_SERVER),
+                // CVE-2026-23493: never persist cookies or server/env variables (DB passwords, session IDs).
+                'cookies' => serialize([]),
+                'serverVars' => serialize([]),
                 'date' => time(),
                 'count' => 1,
             ]);

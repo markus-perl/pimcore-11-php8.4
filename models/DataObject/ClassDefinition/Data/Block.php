@@ -39,6 +39,21 @@ class Block extends Data implements CustomResourcePersistingInterface, ResourceP
     use DataObject\Traits\FieldDefinitionEnrichmentDataTrait;
 
     /**
+     * Classes that getDataFromResource() may reconstruct from the stored block data; every other
+     * class name in the input is refused (CVE-2026-45162 / CVE-2026-55220, list as in upstream 2026.x).
+     *
+     * @internal
+     */
+    private const ALLOWED_RESOURCE_CLASSES = [
+        DataObject\Data\Consent::class,
+        DataObject\Data\ExternalImage::class,
+        DataObject\Data\StructuredTable::class,
+        Element\Data\MarkerHotspotItem::class,
+        \Carbon\Carbon::class,
+        \Carbon\CarbonImmutable::class,
+    ];
+
+    /**
      * @internal
      */
     public bool $lazyLoading = false;
@@ -173,7 +188,7 @@ class Block extends Data implements CustomResourcePersistingInterface, ResourceP
                 }, $data);
             }
 
-            $unserializedData = Serialize::unserialize($data);
+            $unserializedData = Serialize::unserialize($data, self::ALLOWED_RESOURCE_CLASSES);
             $result = [];
 
             foreach ($unserializedData as $blockElements) {
