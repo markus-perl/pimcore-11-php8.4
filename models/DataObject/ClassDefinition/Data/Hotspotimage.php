@@ -131,7 +131,8 @@ class Hotspotimage extends Data implements ResourcePersistenceAwareInterface, Qu
             // check if the data is JSON (backward compatibility)
             $md = json_decode($metaData, true);
             if (!$md) {
-                $md = Serialize::unserialize($metaData);
+                // Only the hotspot item class may be instantiated (CVE-2026-55220, backport of upstream 11.5.19).
+                $md = Serialize::unserialize($metaData, [Element\Data\MarkerHotspotItem::class]);
             } elseif (is_array($md)) {
                 $md['hotspots'] = $md;
             }

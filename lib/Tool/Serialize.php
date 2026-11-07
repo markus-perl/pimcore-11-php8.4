@@ -28,10 +28,14 @@ final class Serialize
         return serialize($data);
     }
 
-    public static function unserialize(?string $data = null): mixed
+    /**
+     * @param bool|list<class-string> $allowedClasses passed to unserialize()'s `allowed_classes`;
+     *                                                 restrict it whenever the data may be attacker-controlled
+     */
+    public static function unserialize(?string $data = null, bool|array $allowedClasses = true): mixed
     {
         if ($data) {
-            $data = unserialize($data);
+            $data = unserialize($data, ['allowed_classes' => $allowedClasses]);
         }
 
         return $data;
