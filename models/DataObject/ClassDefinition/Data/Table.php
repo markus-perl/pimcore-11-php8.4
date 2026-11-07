@@ -220,7 +220,8 @@ class Table extends Data implements ResourcePersistenceAwareInterface, QueryReso
      */
     public function getDataFromResource(mixed $data, DataObject\Concrete|null $object = null, array $params = []): array
     {
-        $unserializedData = Serialize::unserialize((string) $data);
+        // CVE-2026-45162 (backport of upstream 4788bf3a): table data is a plain array of scalars
+        $unserializedData = Serialize::unserialize((string) $data, false);
 
         if ($data === null || empty($unserializedData)) {
             return [];

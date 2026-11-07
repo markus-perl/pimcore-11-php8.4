@@ -79,7 +79,14 @@ class Authentication
         });
 
         try {
-            $token = unserialize($serializedToken);
+            // CVE-2026-58401 (backport of upstream 2026.x): restrict deserialization to the known
+            // session-token object graph; any other class becomes __PHP_Incomplete_Class, so none
+            // of its magic methods run, and such a token is dropped.
+            $token = unserialize($serializedToken, ['allowed_classes' => self::getSessionTokenAllowedClasses()]);
+            if ($token instanceof \__PHP_Incomplete_Class) {
+                Logger::warning('Refused a security token with a not allowed class from the session.', ['key' => 'pimcore_admin']);
+                $token = null;
+            }
         } catch (ErrorException $e) {
             if (0x37313BC !== $e->getCode()) {
                 throw $e;
@@ -91,6 +98,34 @@ class Authentication
         }
 
         return $token;
+    }
+
+    /**
+     * Classes that legitimately occur in a serialized "pimcore_admin" session security token
+     * (list as in upstream 2026.x).
+     *
+     * @return list<string>
+     *
+     * @internal
+     */
+    public static function getSessionTokenAllowedClasses(): array
+    {
+        $allowedClasses = [
+            \Pimcore\Security\User\User::class,
+            User::class,
+            \Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken::class,
+            \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken::class,
+            // admin-ui-classic-bundle stores this subclass while 2FA is pending; referenced by name
+            // because admin-ui-classic-bundle is not a core dependency.
+            'Pimcore\\Bundle\\AdminBundle\\Security\\Authentication\\Token\\TwoFactorRequiredToken',
+        ];
+
+        // scheb/2fa stores a TwoFactorToken (wrapping the authenticated token) during the 2FA step.
+        if (class_exists(\Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken::class)) {
+            $allowedClasses[] = \Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken::class;
+        }
+
+        return $allowedClasses;
     }
 
     /**

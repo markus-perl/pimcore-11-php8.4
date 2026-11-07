@@ -135,8 +135,11 @@ class RoutingListener implements EventSubscriberInterface
         // do not allow requests including /app.php/ => SEO
         // this is after the first redirect check, to allow redirects in app.php?xxx
         if (preg_match('@^/app\.php(.*)@', $path, $matches) && $request->getMethod() === 'GET') {
-            $redirectUrl = $matches[1];
-            $redirectUrl = ltrim($redirectUrl, '/');
+            // GHSA-wxm4-8fgm-hr2g (backport of upstream d935a9afa0): browsers drop tab/newline characters
+            // anywhere in a URL and treat a leading backslash like a slash, so `/\evil.com` would
+            // become the scheme-relative target `//evil.com`. Remove both before trimming.
+            $redirectUrl = str_replace(["\t", "\n", "\r"], '', $matches[1]);
+            $redirectUrl = ltrim($redirectUrl, '/\\');
             $redirectUrl = '/' . $redirectUrl;
 
             $event->setResponse(new RedirectResponse($redirectUrl, Response::HTTP_MOVED_PERMANENTLY));

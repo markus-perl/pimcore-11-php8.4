@@ -64,8 +64,9 @@ class Dao extends Model\Dao\AbstractDao
             $sitesRaw = $this->db->fetchAllAssociative('SELECT id,domains FROM sites');
             $wildcardDomains = [];
             foreach ($sitesRaw as $site) {
-                if (!empty($site['domains']) && strpos($site['domains'], '*')) {
-                    $siteDomains = unserialize($site['domains']);
+                if (!empty($site['domains']) && strpos($site['domains'], '*') !== false) {
+                    // CVE-2026-45162 (backport of upstream 4788bf3a): domains are a plain string list
+                    $siteDomains = unserialize($site['domains'], ['allowed_classes' => false]);
                     if (is_array($siteDomains) && count($siteDomains) > 0) {
                         foreach ($siteDomains as $siteDomain) {
                             if (str_contains($siteDomain, '*')) {

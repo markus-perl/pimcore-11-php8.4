@@ -15,9 +15,11 @@
 
 namespace Pimcore\Model\Tool\TmpStore;
 
+use __PHP_Incomplete_Class;
 use Exception;
 use Pimcore\Db\Helper;
 use Pimcore\Model;
+use Pimcore\Tool\Serialize;
 
 /**
  * @internal
@@ -61,7 +63,14 @@ class Dao extends Model\Dao\AbstractDao
 
         if ($item) {
             if ($item['serialized']) {
-                $item['data'] = unserialize($item['data']);
+                // CVE-2026-45162 (backport of upstream 2026.x): only the value objects that Pimcore
+                // itself stores in tmp_store (deferred image thumbnails, video thumbnail jobs) may be
+                // instantiated; anything else becomes __PHP_Incomplete_Class and the item is refused.
+                $data = Serialize::unserialize((string) $item['data'], self::ALLOWED_CLASSES);
+                if (($data === false && $item['data'] !== serialize(false)) || self::containsIncomplete($data)) {
+                    return false;
+                }
+                $item['data'] = $data;
             }
 
             $item['serialized'] = (bool)$item['serialized'];
@@ -78,5 +87,44 @@ class Dao extends Model\Dao\AbstractDao
         $items = $this->db->fetchFirstColumn('SELECT id FROM tmp_store WHERE tag = ?', [$tag]);
 
         return $items;
+    }
+
+    /**
+     * Classes Pimcore core stores in tmp_store (list as in upstream 2026.x).
+     */
+    private const ALLOWED_CLASSES = [
+        Model\Asset\Image\Thumbnail\Config::class,
+        Model\Asset\Video\Thumbnail\Processor::class,
+        Model\Asset\Video\Thumbnail\Config::class,
+        \Pimcore\Video\Adapter\Ffmpeg::class,
+    ];
+
+    /**
+     * @param array<int, true> $seen object ids already visited (cycles)
+     */
+    private static function containsIncomplete(mixed $value, array &$seen = []): bool
+    {
+        if ($value instanceof __PHP_Incomplete_Class) {
+            return true;
+        }
+
+        if (is_object($value)) {
+            $id = spl_object_id($value);
+            if (isset($seen[$id])) {
+                return false;
+            }
+            $seen[$id] = true;
+            $value = (array) $value;
+        }
+
+        if (is_array($value)) {
+            foreach ($value as $v) {
+                if ((is_array($v) || is_object($v)) && self::containsIncomplete($v, $seen)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

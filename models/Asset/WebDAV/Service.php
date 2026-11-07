@@ -33,7 +33,10 @@ class Service
     {
         $log = [];
         if (file_exists(self::getDeleteLogFile())) {
-            $log = unserialize(file_get_contents(self::getDeleteLogFile()));
+            // CVE-2026-45162: the log itself is an array of scalars (each asset is a serialized string
+            // in 'data'), so the outer layer must not instantiate any class.
+            $raw = file_get_contents(self::getDeleteLogFile());
+            $log = is_string($raw) ? unserialize($raw, ['allowed_classes' => false]) : [];
             if (!is_array($log)) {
                 $log = [];
             } else {
