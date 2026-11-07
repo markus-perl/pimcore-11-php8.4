@@ -128,9 +128,9 @@ class GD extends Adapter
 
     protected function destroy(): void
     {
-        if ($this->resource) {
-            imagedestroy($this->resource);
-        }
+        // imagedestroy() is a no-op since PHP 8.0 and deprecated in 8.5;
+        // dropping the reference frees the GdImage.
+        $this->resource = null;
     }
 
     private function createImage(int $width, int $height): GdImage

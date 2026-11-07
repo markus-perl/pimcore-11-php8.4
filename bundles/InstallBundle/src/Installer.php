@@ -382,7 +382,8 @@ class Installer
         $mysqlSslCertPath = $params['mysql_ssl_cert_path'];
         if (!empty($mysqlSslCertPath)) {
             $dbConfig['driverOptions'] = [
-                PDO::MYSQL_ATTR_SSL_CA => $mysqlSslCertPath,
+                // PDO::MYSQL_ATTR_* is deprecated in PHP 8.5; Pdo\Mysql exists since 8.4.
+                (PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => $mysqlSslCertPath,
             ];
         }
 

@@ -516,7 +516,7 @@ final class Requirements
         $checks[] = new Check([
             'name' => 'PDO MySQL',
             'link' => 'https://www.php.net/pdo_mysql',
-            'state' => @constant('PDO::MYSQL_ATTR_FOUND_ROWS') ? Check::STATE_OK : Check::STATE_ERROR,
+            'state' => extension_loaded('pdo_mysql') ? Check::STATE_OK : Check::STATE_ERROR,
         ]);
 
         // iconv

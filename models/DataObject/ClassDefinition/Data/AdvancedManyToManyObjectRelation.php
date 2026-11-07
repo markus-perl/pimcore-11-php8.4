@@ -555,7 +555,7 @@ class AdvancedManyToManyObjectRelation extends ManyToManyObjectRelation implemen
                 'id' => $object->getId(),
                 'fieldname' => $this->getName(),
             ];
-            if $context) {
+            if ($context) {
                 if (!empty($context['fieldname'])) {
                     $deleteConditions['ownername'] = $context['fieldname'];
                 }
